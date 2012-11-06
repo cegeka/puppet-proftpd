@@ -1,0 +1,46 @@
+<VirtualHost *>
+
+Include /etc/proftpd/users.d/ftps.conf
+
+ServerAdmin                     root@localhost
+ServerName                      "ftps-intern.cegeka.be"
+ServerIdent                     on "interne Secure FTP server "
+
+<IfModule mod_tls.c>
+TLSEngine                       on
+TLSRequired                     on
+TLSLog                          /var/log/proftpd/secureftp-intern.log
+TLSCipherSuite                  ALL:!ADH
+TLSOptions                      NoCertRequest
+TLSCACertificateFile           /etc/proftpd/ssl/root-ca.crt
+TLSRSACertificateFile           /etc/proftpd/ssl/cegeka-be.pem
+TLSRSACertificateKeyFile        /etc/proftpd/ssl/cegeka-be.key
+TLSCertificateChainFile         /etc/proftpd/ssl/globalsign-intermediate.crt
+TLSVerifyClient                 off
+</IfModule>
+
+DisplayLogin                    welcome.msg
+
+PathDenyFilter                  \.ftp[a-z]+$
+
+Port                            990
+
+# Umask 022 is a good standard umask to prevent new files and dirs
+# (second parm) from being group and world writable.
+Umask 027
+
+DeleteAbortedStores             on
+MaxClientsPerHost               10
+MaxLoginAttempts                3
+DefaultRoot                     ~
+AllowOverwrite                  on
+
+PassivePorts                    60000 65535
+
+TimesGMT off
+
+TransferLog <%= logdir %>/proftpd/ftps/xferlog
+SystemLog   <%= logdir %>/proftpd/ftps/proftpd.log
+ExtendedLog <%= logdir %>/proftpd/ftps/commands.log all
+
+</VirtualHost>

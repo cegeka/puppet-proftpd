@@ -1,0 +1,2 @@
+define proftpd::instance::sftp() {
+}

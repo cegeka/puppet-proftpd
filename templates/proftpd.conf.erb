@@ -1,0 +1,83 @@
+# This is the ProFTPD configuration file
+#
+# See: http://www.proftpd.org/docs/directives/linked/by-name.html
+
+# Server Config - config used for anything outside a <VirtualHost> or <Global> context
+# See: http://www.proftpd.org/docs/howto/Vhost.html
+
+# Modules should be loaded first
+# Sites will be loaded at the end of the configuration
+Include /etc/proftpd/modules.conf
+
+UseIPv6                         off
+
+Port 0
+SocketBindTight on
+
+VRootEngine                     on
+DefaultRoot                     ~ !adm
+RequireValidShell               off
+TimesGMT                        off
+
+LogFormat custom "[%{%F %H:%M:%S}t] %T %a %P %b %m \"%J\" \"%F\" %U %s"
+
+# Don't do reverse DNS lookups (hangs on DNS problems)
+UseReverseDNS                   off
+IdentLookups                    off
+TimeoutLogin                    120
+TimeoutNoTransfer               360
+TimeoutStalled                  360
+TimeoutIdle                     360
+tcpBackLog                      10
+MaxInstances                    30
+
+SystemLog                       /var/log/proftpd/proftpd.log
+
+# Set the user and group that the server runs as
+User                            proftpd
+Group                           proftpd
+
+# To prevent DoS attacks, set the maximum number of child processes
+# to 20.  If you need to allow more than 20 concurrent connections
+# at once, simply increase this value.
+
+MaxInstances                    20
+
+UseSendfile                     off
+
+# Define the log formats
+LogFormat                       default "%h %l %u %t \"%r\" %s %b"
+LogFormat                       auth    "%v [%P] %h %t \"%r\" %s"
+
+<IfDefine TLS>
+  TLSEngine                     on
+  TLSRequired                   on
+  TLSRSACertificateFile         /etc/pki/tls/certs/proftpd.pem
+  TLSRSACertificateKeyFile      /etc/pki/tls/certs/proftpd.pem
+  TLSCipherSuite                ALL:!ADH:!DES
+  TLSOptions                    NoCertRequest
+  TLSVerifyClient               off
+  #TLSRenegotiate               ctrl 3600 data 512000 required off timeout 300
+  TLSLog                        /var/log/proftpd/tls.log
+  <IfModule mod_tls_shmcache.c>
+    TLSSessionCache             shm:/file=/var/run/proftpd/sesscache
+  </IfModule>
+</IfDefine>
+
+<Global>
+  Umask                         022
+  CreateHome on 750 uid 101 gid 65534
+  AllowOverwrite                yes
+  <Limit ALL SITE_CHMOD>
+    AllowAll
+  </Limit>
+
+<IfModule mod_lang.c>
+        LangEngine on
+        LangDefault en_US
+        UseEncoding on
+</IfModule>
+
+</Global>
+
+Include /etc/proftpd/sites.d/*
