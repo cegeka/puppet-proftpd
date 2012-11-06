@@ -1,6 +1,6 @@
 define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $users=[]) {
 
-  require proftpd
+  include proftpd
 
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
@@ -13,7 +13,8 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${module_name}/sites.d/ftp.conf.erb")
+    content => template("${module_name}/sites.d/ftp.conf.erb"),
+    notify  => Service['proftpd']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.conf":
@@ -21,7 +22,8 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${module_name}/users.d/users.conf.erb")
+    content => template("${module_name}/users.d/users.conf.erb"),
+    notify  => Service['proftpd']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.passwd":
