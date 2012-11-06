@@ -59,7 +59,7 @@ class proftpd {
 
   user { 'proftpd':
     ensure     => present,
-    uid        => '1001',
+    uid        => '5001',
     gid        => 'proftpd',
     shell      => '/bin/sh',
     comment    => 'ProFTPd user',
@@ -70,7 +70,7 @@ class proftpd {
 
   group { 'proftpd':
     ensure => present,
-    gid    => '1001'
+    gid    => '5001'
   }
 
 }
