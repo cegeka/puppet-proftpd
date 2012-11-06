@@ -26,8 +26,8 @@ PassivePorts                    60000 65535
 
 TimesGMT off
 
-TransferLog /data/logs/proftpd/ftp_xferlog
-SystemLog   /data/logs/proftpd/ftp_proftpd.log
-ExtendedLog /data/logs/proftpd/ftp_commands.log all
+TransferLog <%= logdir %>/proftpd/ftp/xferlog
+SystemLog   <%= logdir %>/proftpd/ftp/proftpd.log
+ExtendedLog <%= logdir %>/proftpd/ftp/commands.log all
 
 </VirtualHost>

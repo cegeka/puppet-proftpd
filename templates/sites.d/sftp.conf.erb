@@ -32,8 +32,8 @@ AllowOverwrite                  on
 
 TimesGMT off
 
-TransferLog /data/logs/proftpd/sftp_xferlog
-SystemLog   /data/logs/proftpd/sftp_proftpd.log
-ExtendedLog /data/logs/proftpd/sftp_commands.log all
+TransferLog <%= logdir %>/proftpd/sftp/xferlog
+SystemLog   <%= logdir %>/proftpd/sftp/proftpd.log
+ExtendedLog <%= logdir %>/proftpd/sftp/commands.log all
 
 </VirtualHost>
