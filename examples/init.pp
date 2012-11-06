@@ -5,7 +5,6 @@ proftpd::instance::ftp { 'proftpd ftp vhost':
 }
 
 proftpd::instance::user { 'foo user for ftp':
-  ensure    => present,
   ipaddress => '0.0.0.0',
   port      => '21',
   username  => 'foo',

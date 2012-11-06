@@ -1,6 +1,17 @@
-define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $password=undef, $comment='', $home="/home/$username", $ensure = present) {
+define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $password=undef, $uid=undef, $gid=undef, $comment='', $home="/home/$username", $ensure = present) {
 
   $vhost_name = "${ipaddress}_${port}"
+
+  if ($uid == undef) {
+    $uid_real = '1001'
+  } else {
+    $uid_real = $uid
+  }
+  if ($gid == undef) {
+    $gid_real = '1001'
+  } else {
+    $gid_real = $gid
+  }
 
   if $ensure in [ present, absent ] {
     $ensure_real = $ensure
@@ -26,8 +37,8 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
           changes => [
             "set [last()+1] $username",
             "set $username/password $password",
-            "set $username/uid 1001",
-            "set $username/gid 1001",
+            "set $username/uid $uid_real",
+            "set $username/gid $gid_real",
             "set $username/name $comment",
             "set $username/home $home",
             "set $username/shell /bin/false"
