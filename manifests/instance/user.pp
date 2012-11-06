@@ -3,12 +3,12 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
   $vhost_name = "${ipaddress}_${port}"
 
   if ($uid == undef) {
-    $uid_real = '1001'
+    $uid_real = '5001'
   } else {
     $uid_real = $uid
   }
   if ($gid == undef) {
-    $gid_real = '1001'
+    $gid_real = '5001'
   } else {
     $gid_real = $gid
   }
@@ -39,7 +39,7 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
             "set $username/password $password",
             "set $username/uid $uid_real",
             "set $username/gid $gid_real",
-            "set $username/name $comment",
+            "set $username/name '$comment'",
             "set $username/home $home",
             "set $username/shell /bin/false"
           ],
