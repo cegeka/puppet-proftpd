@@ -44,7 +44,7 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
             "set $username/shell /bin/false"
           ],
           onlyif  => "match $username size == 0",
-          require => Augeas["$vhost_name.passwd/$username/rm"]
+          require => Augeas["$vhost_name.passwd/$username/rm"],
         }
       }
     default: { notice('The given ensure parameter is not supported') }
