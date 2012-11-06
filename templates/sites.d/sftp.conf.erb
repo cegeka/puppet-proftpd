@@ -1,6 +1,6 @@
-<VirtualHost *>
+<VirtualHost <%= ipaddress %>>
 
-Include /etc/proftpd/users.d/sftp.conf
+Include /etc/proftpd/users.d/<%= vhost_name %>.conf
 
 ServerName                      "sftp intern"
 ServerIdent                     on "FTP Server ready."
@@ -11,7 +11,8 @@ DisplayLogin                    welcome.msg
 
 PathDenyFilter                  \.ftp[a-z]+$
 
-Port                            22
+Port                            <%= port %>
+
 SFTPEngine on
 SFTPLog /var/log/proftpd/sftp.log
 SFTPHostKey /etc/ssh/ssh_host_dsa_key
@@ -32,8 +33,7 @@ AllowOverwrite                  on
 
 TimesGMT off
 
-TransferLog <%= logdir %>/proftpd/sftp/xferlog
-SystemLog   <%= logdir %>/proftpd/sftp/proftpd.log
-ExtendedLog <%= logdir %>/proftpd/sftp/commands.log all
+TransferLog <%= logdir %>/proftpd/sftp/<%= vhost_name %>_xferlog
+ExtendedLog <%= logdir %>/proftpd/sftp/<%= vhost_name %>_commands.log all
 
 </VirtualHost>
