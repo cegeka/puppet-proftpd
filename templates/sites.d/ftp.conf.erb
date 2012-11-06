@@ -1,0 +1,33 @@
+<VirtualHost *>
+
+Include /etc/proftpd/users.d/ftp.conf
+
+ServerName                      "ftp intern"
+ServerIdent                     on "FTP Server ready."
+ServerAdmin                     root@localhost
+
+DisplayLogin                    welcome.msg
+
+PathDenyFilter                  \.ftp[a-z]+$
+
+Port                            21
+
+# Umask 022 is a good standard umask to prevent new files and dirs
+# (second parm) from being group and world writable.
+Umask 007
+
+DeleteAbortedStores             on
+MaxClientsPerHost               10
+MaxLoginAttempts                3
+DefaultRoot                     ~
+AllowOverwrite                  on
+
+PassivePorts                    60000 65535
+
+TimesGMT off
+
+TransferLog <%= logdir %>/proftpd/ftp/xferlog
+SystemLog   <%= logdir %>/proftpd/ftp/proftpd.log
+ExtendedLog <%= logdir %>/proftpd/ftp/commands.log all
+
+</VirtualHost>
