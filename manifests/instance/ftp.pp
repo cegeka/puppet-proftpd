@@ -14,7 +14,7 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
     group   => root,
     mode    => '0644',
     content => template("${module_name}/sites.d/ftp.conf.erb"),
-    notify  => Service['proftpd']
+    notify  => Class['proftpd']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.conf":
@@ -23,7 +23,7 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
     group   => root,
     mode    => '0644',
     content => template("${module_name}/users.d/users.conf.erb"),
-    notify  => Service['proftpd']
+    notify  => Class['proftpd']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.passwd":
