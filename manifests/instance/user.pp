@@ -1,5 +1,7 @@
 define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $password=undef, $uid=undef, $gid=undef, $comment='', $home="/home/$username", $ensure = present) {
 
+  include proftpd
+
   $vhost_name = "${ipaddress}_${port}"
 
   if ($uid == undef) {
@@ -27,9 +29,6 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
       }
     'present':
       {
-
-        Augeas <| title == "$vhost_name.passwd/$username/rm" |>
-
         augeas { "$vhost_name.passwd/$username/add" :
           lens    => 'Passwd.lns',
           incl    => "/etc/proftpd/users.d/${vhost_name}.passwd",
@@ -44,7 +43,23 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
             "set $username/shell /bin/false"
           ],
           onlyif  => "match $username size == 0",
-          require => Augeas["$vhost_name.passwd/$username/rm"],
+          require => Class['proftpd']
+        }
+
+        augeas { "$vhost_name.passwd/$username/modify" :
+          lens    => 'Passwd.lns',
+          incl    => "/etc/proftpd/users.d/${vhost_name}.passwd",
+          context => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
+          changes => [
+            "set $username/password $password",
+            "set $username/uid $uid_real",
+            "set $username/gid $gid_real",
+            "set $username/name '$comment'",
+            "set $username/home $home",
+            "set $username/shell /bin/false"
+          ],
+          onlyif  => "match $username size == 1",
+          require => Class['proftpd']
         }
       }
     default: { notice('The given ensure parameter is not supported') }
@@ -57,7 +72,8 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
     changes => [
       "rm $username",
     ],
-    onlyif  => "match $username size > 0"
+    onlyif  => "match $username size > 0",
+    require => Class['proftpd']
   }
 
 }
