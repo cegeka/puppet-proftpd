@@ -43,7 +43,7 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
             "set $username/shell /bin/false"
           ],
           onlyif  => "match $username size == 0",
-          require => Package['proftpd']
+          require => Class['proftpd']
         }
 
         augeas { "$vhost_name.passwd/$username/modify" :
@@ -59,7 +59,7 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
             "set $username/shell /bin/false"
           ],
           onlyif  => "match $username size == 1",
-          require => Package['proftpd']
+          require => Class['proftpd']
         }
       }
     default: { notice('The given ensure parameter is not supported') }
@@ -73,7 +73,7 @@ define proftpd::instance::user($ipaddress=undef, $port=undef, $username=undef, $
       "rm $username",
     ],
     onlyif  => "match $username size > 0",
-    require => Package['proftpd']
+    require => Class['proftpd']
   }
 
 }
