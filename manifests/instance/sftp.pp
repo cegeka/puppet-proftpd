@@ -46,4 +46,12 @@ define proftpd::instance::sftp(
     replace => false
   }
 
+  file { "/etc/proftpd/users.d/${vhost_name}.group":
+    ensure  => file,
+    owner   => root,
+    group   => root,
+    mode    => '0644',
+    replace => false
+  }
+
 }

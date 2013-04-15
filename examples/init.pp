@@ -11,3 +11,9 @@ proftpd::instance::user { 'foo user for ftp':
   password  => 'FnLeyPMkwzkPE',
   comment   => 'Test FTP User'
 }
+
+proftpd::instance::group { 'foo group':
+  ipaddress => '0.0.0.0',
+  port      => '21',
+  group     => 'foo',
+}
