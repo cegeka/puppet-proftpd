@@ -45,7 +45,7 @@ define proftpd::instance::user(
           context => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
           changes => [
             "set [last()+1] ${username}",
-            "set ${username}/password ${password}d",
+            "set ${username}/password ${password}",
             "set ${username}/uid ${uid_real}",
             "set ${username}/gid ${gid_real}",
             "set ${username}/name '${comment}'",
