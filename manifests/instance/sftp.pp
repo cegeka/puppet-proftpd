@@ -20,6 +20,13 @@ define proftpd::instance::sftp(
 
   $vhost_name = "${ipaddress}_${port}"
 
+  file { "${logdir}/proftpd":
+    ensure  => directory,
+    owner   => 'proftpd',
+    group   => 'proftpd',
+    notify  => Service['proftpd']
+  }
+
   file { "/etc/proftpd/sites.d/${vhost_name}.conf":
     ensure  => file,
     owner   => root,

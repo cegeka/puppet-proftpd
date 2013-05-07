@@ -14,6 +14,13 @@ define proftpd::instance::user(
 
   $vhost_name = "${ipaddress}_${port}"
 
+  Augeas {
+    lens      => 'Passwd.lns',
+    incl      => "/etc/proftpd/users.d/${vhost_name}.passwd",
+    context   => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
+    load_path => "${settings::vardir}/lib/augeas/lenses"
+  }
+
   if ($uid == undef) {
     $uid_real = '5001'
   } else {
@@ -40,12 +47,9 @@ define proftpd::instance::user(
     'present':
       {
         augeas { "${vhost_name}.passwd/${username}/add" :
-          lens    => 'Passwd.lns',
-          incl    => "/etc/proftpd/users.d/${vhost_name}.passwd",
-          context => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
-          changes => [
+          changes   => [
             "set [last()+1] ${username}",
-            "set ${username}/password ${password}d",
+            "set ${username}/password ${password}",
             "set ${username}/uid ${uid_real}",
             "set ${username}/gid ${gid_real}",
             "set ${username}/name '${comment}'",
@@ -57,10 +61,7 @@ define proftpd::instance::user(
         }
 
         augeas { "${vhost_name}.passwd/${username}/modify" :
-          lens    => 'Passwd.lns',
-          incl    => "/etc/proftpd/users.d/${vhost_name}.passwd",
-          context => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
-          changes => [
+          changes   => [
             "set ${username}/password ${password}",
             "set ${username}/uid ${uid_real}",
             "set ${username}/gid ${gid_real}",
@@ -76,10 +77,7 @@ define proftpd::instance::user(
   }
 
   @augeas { "${vhost_name}.passwd/${username}/rm" :
-    lens    => 'Passwd.lns',
-    incl    => "/etc/proftpd/users.d/${vhost_name}.passwd",
-    context => "/files/etc/proftpd/users.d/${vhost_name}.passwd",
-    changes => [
+    changes   => [
       "rm ${username}",
     ],
     onlyif  => "match ${username} size > 0",
