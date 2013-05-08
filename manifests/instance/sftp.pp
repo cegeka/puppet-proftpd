@@ -9,7 +9,7 @@ define proftpd::instance::sftp(
   $max_clients='45',
   $max_loginattempts='3',
   $default_root='~',
-  $allowoverride='on',
+  $allowoverwrite='on',
 ) {
 
   include proftpd
@@ -20,10 +20,19 @@ define proftpd::instance::sftp(
 
   $vhost_name = "${ipaddress}_${port}"
 
-  file { "${logdir}/proftpd":
+  if ! defined(File["${logdir}/proftpd"]) {
+    file { "${logdir}/proftpd":
+      ensure  => directory,
+      owner   => 'proftpd',
+      group   => 'proftpd',
+    }
+  }
+
+  file { "${logdir}/proftpd/sftp":
     ensure  => directory,
     owner   => 'proftpd',
     group   => 'proftpd',
+    require => File["${logdir}/proftpd"],
     notify  => Service['proftpd']
   }
 
@@ -32,7 +41,7 @@ define proftpd::instance::sftp(
     owner   => root,
     group   => root,
     mode    => '0644',
-    content => template("${module_name}/sites.d/ftp.conf.erb"),
+    content => template("${module_name}/sites.d/sftp.conf.erb"),
     notify  => Service['proftpd']
   }
 
