@@ -67,7 +67,7 @@ define proftpd::instance::user(
             "set ${username}/gid ${gid_real}",
             "set ${username}/name '${comment}'",
             "set ${username}/home ${home}",
-            "set ${username}/shell /bin/false"
+            "set ${username}/shell /sbin/nologin"
           ],
           onlyif  => "match ${username} size == 1",
           require => Class['proftpd']
