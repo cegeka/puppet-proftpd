@@ -18,6 +18,12 @@ define proftpd::instance::sftp(
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
   }
 
+  if ($sftprekey != undef) {
+    if $sftprekey !~ /(?i-mx:^none\s*$|^required\s*$|^required\s+\d+\s+\d+\s*$|^required\s+\d+\s+\d+\s+\d+\s*$)/ {
+      fail("Proftpd::Instance::Ftp[${title}]: usage: SFTPRekey 'none'|'required' [[interval (in seconds) bytes (in MB)] timeout (in seconds)]")
+	  }
+  }
+
   $vhost_name = "${ipaddress}_${port}"
 
   if ! defined(File["${logdir}/proftpd"]) {
