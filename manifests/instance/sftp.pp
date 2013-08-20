@@ -24,6 +24,12 @@ define proftpd::instance::sftp(
 	  }
   }
 
+  if ($timeoutidle != undef) {
+    if $timeoutidle !~ /(?-mx:^\s*\d+\s*$)/ {
+      fail("Proftpd::Instance::Ftp[${title}]: usage: TimeoutIdle [timeout (in seconds)]")
+    }
+  }
+
   $vhost_name = "${ipaddress}_${port}"
 
   if ! defined(File["${logdir}/proftpd"]) {
