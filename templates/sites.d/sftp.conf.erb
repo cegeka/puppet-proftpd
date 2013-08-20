@@ -20,6 +20,10 @@ SFTPHostKey         /etc/ssh/ssh_host_rsa_key
 SFTPClientMatch 		WinSCP|ClientSftp sftpProtocolVersion 1-3
 SFTPCompression     delayed
 
+<% if @sftprekey %>
+SFTPRekey           <%= @sftprekey %>
+<% end %>
+
 Umask               006
 
 DeleteAbortedStores on
