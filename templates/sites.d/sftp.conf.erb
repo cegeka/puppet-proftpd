@@ -24,6 +24,10 @@ SFTPCompression     delayed
 SFTPRekey           <%= @sftprekey %>
 <% end %>
 
+<% if @timeoutidle %>
+TimeoutIdle         <%= @timeoutidle %>
+<% end %>
+
 Umask               006
 
 DeleteAbortedStores on
