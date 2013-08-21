@@ -10,6 +10,8 @@ define proftpd::instance::sftp(
   $max_loginattempts='3',
   $default_root='~',
   $allowoverwrite='on',
+  $sftprekey=undef,
+  $timeoutidle=undef,
 ) {
 
   include proftpd
