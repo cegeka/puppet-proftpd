@@ -8,6 +8,22 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
 
   $vhost_name = "${ipaddress}_${port}"
 
+  if ! defined(File["${logdir}/proftpd"]) {
+    file { "${logdir}/proftpd":
+      ensure  => directory,
+      owner   => 'proftpd',
+      group   => 'proftpd',
+    }
+  }
+
+  file { "${logdir}/proftpd/ftp":
+    ensure  => directory,
+    owner   => 'proftpd',
+    group   => 'proftpd',
+    require => File["${logdir}/proftpd"],
+    notify  => Service['proftpd']
+  }
+
   file { "/etc/proftpd/sites.d/${vhost_name}.conf":
     ensure  => file,
     owner   => root,
