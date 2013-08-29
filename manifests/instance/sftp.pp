@@ -9,7 +9,7 @@ define proftpd::instance::sftp(
   $max_clients='45',
   $max_loginattempts='3',
   $default_root='~',
-  $allowoverride='on',
+  $allowoverwrite='on',
   $protocol='sftp',
   $sftprekey=undef,
   $timeoutidle=undef,
