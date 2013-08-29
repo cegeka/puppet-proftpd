@@ -12,7 +12,7 @@
 #
 class proftpd {
 
-  package { ['proftpd','proftpd-mysql','proftpd-ldap']:
+  package { ['proftpd','proftpd-mysql','proftpd-postgresql','proftpd-ldap']:
     ensure => present
   }
 
