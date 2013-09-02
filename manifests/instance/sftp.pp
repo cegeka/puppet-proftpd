@@ -10,17 +10,18 @@ define proftpd::instance::sftp(
   $max_loginattempts='3',
   $default_root='~',
   $allowoverwrite='on',
-  $protocol='sftp',
   $sftprekey=undef,
   $timeoutidle=undef,
   $authentication='file',
   $mysql_host=undef,
   $mysql_user=undef,
   $mysql_pass=undef,
-  $mysql_db=undef,
+  $mysql_db=undef
 ) {
 
   include proftpd
+
+  $protocol = 'sftp'
 
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
@@ -74,20 +75,22 @@ define proftpd::instance::sftp(
     notify  => Service['proftpd']
   }
 
-  file { "/etc/proftpd/users.d/${vhost_name}.passwd":
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    replace => false
-  }
+  if $authentication == 'file' {
+    file { "/etc/proftpd/users.d/${vhost_name}.passwd":
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      replace => false
+    }
 
-  file { "/etc/proftpd/users.d/${vhost_name}.group":
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    replace => false
+    file { "/etc/proftpd/users.d/${vhost_name}.group":
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      replace => false
+    }
   }
 
 }
