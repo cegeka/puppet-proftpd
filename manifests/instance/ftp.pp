@@ -1,6 +1,25 @@
-define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $users=[]) {
+define proftpd::instance::ftp(
+  $ipaddress='0.0.0.0',
+  $port='21',
+  $server_name='FTP server',
+  $server_ident='FTP server ready',
+  $server_admin='root@server',
+  $logdir=undef,
+  $max_clients='45',
+  $max_loginattempts='3',
+  $default_root='~',
+  $allowoverwrite='on',
+  $passive_ports='60000 65535',
+  $authentication='file',
+  $mysql_host=undef,
+  $mysql_user=undef,
+  $mysql_pass=undef,
+  $mysql_db=undef
+) {
 
   include proftpd
+
+  $protocol = 'ftp'
 
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
@@ -42,20 +61,22 @@ define proftpd::instance::ftp($ipaddress='0.0.0.0', $port='21', $logdir=undef, $
     notify  => Service['proftpd']
   }
 
-  file { "/etc/proftpd/users.d/${vhost_name}.passwd":
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    replace => false
-  }
+  if $authentication == 'file' {
+    file { "/etc/proftpd/users.d/${vhost_name}.passwd":
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      replace => false
+    }
 
-  file { "/etc/proftpd/users.d/${vhost_name}.group":
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    replace => false
+    file { "/etc/proftpd/users.d/${vhost_name}.group":
+      ensure  => file,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      replace => false
+    }
   }
 
 }
