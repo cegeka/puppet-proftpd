@@ -12,6 +12,7 @@ define proftpd::instance::sftp(
   $allowoverwrite='on',
   $sftprekey=undef,
   $timeoutidle=undef,
+  $sftp_client_match=[],
   $authentication='file',
   $mysql_host=undef,
   $mysql_user=undef,
