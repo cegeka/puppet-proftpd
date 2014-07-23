@@ -4,8 +4,8 @@ RequireValidShell       off
 
 <%- if authentication == 'file' -%>
 AuthOrder mod_auth_file.c
-AuthUserFile            /etc/proftpd/users.d/<%= vhost_name %>.passwd
-AuthGroupFile           /etc/proftpd/users.d/<%= vhost_name %>.group
+AuthUserFile            /etc/proftpd/users.d/<%= @vhost_name %>.passwd
+AuthGroupFile           /etc/proftpd/users.d/<%= @vhost_name %>.group
 <%- end -%>
 
 <%- if authentication == 'sql' -%>
@@ -13,11 +13,11 @@ AuthOrder mod_sql.c
 SQLBackend                      mysql
 SQLAuthTypes                    Crypt Backend OpenSSL
 SQLAuthenticate                 users
-SQLConnectInfo                  <%= mysql_db %>@<%= mysql_host %>:3306 <%= mysql_user %> <%= mysql_pass %>
+SQLConnectInfo                  <%= @mysql_db %>@<%= @mysql_host %>:3306 <%= @mysql_user %> <%= @mysql_pass %>
 SQLUserInfo                     ftp_users userid passwd uid gid home shell
 SQLDefaultUID                   5001
 SQLDefaultGID                   5001
-SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= protocol %> = 'true'"
+SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= @protocol %> = 'true'"
 <%- if protocol == 'sftp' -%>
 SQLNamedQuery get-user-authorized-keys SELECT "sshkey FROM sftp_userkeys WHERE name='%U'"
 SQLNamedQuery get-host-authorized-keys SELECT "sshkey FROM sftp_hostkeys WHERE host='%{0}'"
