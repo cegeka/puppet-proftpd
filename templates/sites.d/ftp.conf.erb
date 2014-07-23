@@ -1,32 +1,32 @@
-<VirtualHost <%= ipaddress %>>
+<VirtualHost <%= @ipaddress %>>
 
-Include /etc/proftpd/users.d/<%= vhost_name %>.conf
+Include /etc/proftpd/users.d/<%= @vhost_name %>.conf
 
-ServerName          "<%= server_name %>"
-ServerIdent         on "<%= server_ident %>"
-ServerAdmin         <%= server_admin %>
+ServerName          "<%= @server_name %>"
+ServerIdent         on "<%= @server_ident %>"
+ServerAdmin         <%= @server_admin %>
 
 DisplayLogin 				welcome.msg
 
 PathDenyFilter      \.ftp[a-z]+$
 
-Port                <%= port %>
+Port                <%= @port %>
 
 # Umask 022 is a good standard umask to prevent new files and dirs
 # (second parm) from being group and world writable.
 Umask 007
 
 DeleteAbortedStores             on
-MaxClientsPerHost               <%= max_clients %>
-MaxLoginAttempts                <%= max_loginattempts %>
-DefaultRoot                     <%= default_root %>
-AllowOverwrite                  <%= allowoverwrite %>
+MaxClientsPerHost               <%= @max_clients %>
+MaxLoginAttempts                <%= @max_loginattempts %>
+DefaultRoot                     <%= @default_root %>
+AllowOverwrite                  <%= @allowoverwrite %>
 
-PassivePorts                    <%= passive_ports %>
+PassivePorts                    <%= @passive_ports %>
 
 TimesGMT off
 
-TransferLog <%= logdir %>/proftpd/ftp/<%= vhost_name %>_xferlog
-ExtendedLog <%= logdir %>/proftpd/ftp/<%= vhost_name %>_commands.log all
+TransferLog <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_xferlog
+ExtendedLog <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_commands.log all
 
 </VirtualHost>
