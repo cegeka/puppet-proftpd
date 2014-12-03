@@ -27,6 +27,9 @@ LoadModule mod_wrap.c
 LoadModule mod_rewrite.c
 LoadModule mod_sftp.c
 LoadModule mod_sftp_sql.c
+<IfModule !mod_vroot.c>
+LoadModule mod_vroot.c
+</IfModule>
 
 # keep this module the last one
 LoadModule mod_ifsession.c
