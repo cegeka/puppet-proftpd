@@ -1,6 +1,6 @@
-<VirtualHost <%= ipaddress %>>
+<VirtualHost <%= @ipaddress %>>
 
-Include /etc/proftpd/users.d/<%= vhost_name%>.conf
+Include /etc/proftpd/users.d/<%= @vhost_name %>.conf
 
 ServerAdmin                     root@localhost
 ServerName                      "ftps-intern.cegeka.be"
@@ -13,8 +13,8 @@ TLSLog                          /var/log/proftpd/secureftp-intern.log
 TLSCipherSuite                  ALL:!ADH
 TLSOptions                      NoCertRequest
 TLSCACertificateFile            /etc/proftpd/ssl/root-ca.crt
-TLSRSACertificateFile           <%= tls_rsa_cert_file %>
-TLSRSACertificateKeyFile        <%= tls_rsa_cert_key_file %>
+TLSRSACertificateFile           <%= @tls_rsa_cert_file %>
+TLSRSACertificateKeyFile        <%= @tls_rsa_cert_key_file %>
 TLSCertificateChainFile         /etc/proftpd/ssl/globalsign-intermediate.crt
 TLSVerifyClient                 off
 </IfModule>
@@ -23,7 +23,7 @@ DisplayLogin                    welcome.msg
 
 PathDenyFilter                  \.ftp[a-z]+$
 
-Port                            <%= port %>
+Port                            <%= @port %>
 
 # Umask 022 is a good standard umask to prevent new files and dirs
 # (second parm) from being group and world writable.
@@ -39,7 +39,7 @@ PassivePorts                    60000 65535
 
 TimesGMT off
 
-TransferLog <%= logdir %>/proftpd/ftps/<%= vhost_name %>_xferlog
-ExtendedLog <%= logdir %>/proftpd/ftps/<%= vhost_name %>_commands.log all
+TransferLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_xferlog
+ExtendedLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_commands.log all
 
 </VirtualHost>
