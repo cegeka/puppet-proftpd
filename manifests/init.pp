@@ -10,8 +10,11 @@
 #
 # Sample Usage:
 #
-class proftpd(
-  $manage_proftpd_conf=false
+class proftpd (
+  $manage_proftpd_conf = false,
+  $proftpd_user  = 'proftpd',
+  $proftpd_group = 'proftpd'
+
 ) {
 
   package { ['proftpd','proftpd-mysql','proftpd-postgresql','proftpd-ldap']:
