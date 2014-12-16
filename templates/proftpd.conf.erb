@@ -33,8 +33,8 @@ tcpBackLog                      10
 SystemLog                       /var/log/proftpd/proftpd.log
 
 # Set the user and group that the server runs as
-User                            proftpd
-Group                           proftpd
+User                            <%= @proftpd_user %>
+Group                           <%= @proftpd_group %>
 
 # To prevent DoS attacks, set the maximum number of child processes
 # to 20.  If you need to allow more than 20 concurrent connections
