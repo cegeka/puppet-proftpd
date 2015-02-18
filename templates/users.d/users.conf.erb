@@ -15,8 +15,9 @@ SQLAuthTypes                    Crypt Backend OpenSSL
 SQLAuthenticate                 users
 SQLConnectInfo                  <%= @mysql_db %>@<%= @mysql_host %>:3306 <%= @mysql_user %> <%= @mysql_pass %>
 SQLUserInfo                     ftp_users userid passwd uid gid home shell
-SQLDefaultUID                   5001
-SQLDefaultGID                   5001
+SQLGroupInfo                    ftp_group groupname gid members
+SQLMinUserUID                   101
+SQLMinUserGID                   65534
 SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= @protocol %> = 'true'"
 <%- if @protocol == 'sftp' -%>
 SQLNamedQuery get-user-authorized-keys SELECT "sshkey FROM sftp_userkeys WHERE name='%U'"
