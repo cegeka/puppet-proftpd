@@ -12,7 +12,7 @@ AuthGroupFile           /etc/proftpd/users.d/<%= @vhost_name %>.group
 AuthOrder mod_sql.c
 SQLBackend                      mysql
 SQLAuthTypes                    Crypt Backend OpenSSL
-SQLAuthenticate                 users
+SQLAuthenticate                 users groups
 SQLConnectInfo                  <%= @mysql_db %>@<%= @mysql_host %>:3306 <%= @mysql_user %> <%= @mysql_pass %>
 SQLUserInfo                     ftp_users userid passwd uid gid home shell
 SQLGroupInfo                    ftp_group groupname gid members
