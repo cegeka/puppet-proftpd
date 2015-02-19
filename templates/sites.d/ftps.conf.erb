@@ -25,6 +25,8 @@ PathDenyFilter                  \.ftp[a-z]+$
 
 Port                            <%= @port %>
 
+Umask                           0006 0007
+
 DeleteAbortedStores             on
 MaxClientsPerHost               10
 MaxLoginAttempts                3
