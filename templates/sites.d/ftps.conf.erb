@@ -25,10 +25,6 @@ PathDenyFilter                  \.ftp[a-z]+$
 
 Port                            <%= @port %>
 
-# Umask 022 is a good standard umask to prevent new files and dirs
-# (second parm) from being group and world writable.
-Umask 027
-
 DeleteAbortedStores             on
 MaxClientsPerHost               10
 MaxLoginAttempts                3
