@@ -30,6 +30,8 @@ TimeoutIdle         <%= @timeoutidle %>
 SFTPClientMatch     <%= val %>
 <% end -%>
 
+Umask               0006 0007
+
 DeleteAbortedStores on
 MaxClientsPerHost   <%= @max_clients %>
 MaxLoginAttempts    <%= @max_loginattempts %>
