@@ -6,6 +6,9 @@ RequireValidShell       off
 AuthOrder mod_auth_file.c
 AuthUserFile            /etc/proftpd/users.d/<%= @vhost_name %>.passwd
 AuthGroupFile           /etc/proftpd/users.d/<%= @vhost_name %>.group
+<%- if @protocol == 'sftp' -%>
+SFTPAuthorizedUserKeys file:~/.ssh/authorized_keys
+<%- end -%>
 <%- end -%>
 
 <%- if @authentication == 'sql' -%>
