@@ -35,12 +35,14 @@ define proftpd::instance::ftp(
     }
   }
 
-  file { "${logdir}/proftpd/ftp":
-    ensure  => directory,
-    owner   => 'proftpd',
-    group   => 'proftpd',
-    require => File["${logdir}/proftpd"],
-    notify  => Service['proftpd']
+  if ! defined(File["${logdir}/proftpd/ftp"]) {
+    file { "${logdir}/proftpd/ftp":
+      ensure  => directory,
+      owner   => 'proftpd',
+      group   => 'proftpd',
+      require => File["${logdir}/proftpd"],
+      notify  => Service['proftpd']
+    }
   }
 
   file { "/etc/proftpd/sites.d/${vhost_name}.conf":
