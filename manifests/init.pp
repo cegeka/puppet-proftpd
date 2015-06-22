@@ -13,9 +13,13 @@
 class proftpd (
   $manage_proftpd_conf = false,
   $proftpd_user  = 'proftpd',
-  $proftpd_group = 'proftpd'
-
+  $proftpd_group = 'proftpd',
+  $ensure = 'running'
 ) {
+
+  include stdlib
+
+  validate_re($ensure, '^running$|^stopped$|^unmanaged$')
 
   package { ['proftpd','proftpd-mysql','proftpd-postgresql','proftpd-ldap']:
     ensure => present
@@ -56,11 +60,21 @@ class proftpd (
     require => File['/etc/proftpd']
   }
 
-  service { 'proftpd':
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-    subscribe  => [ File['/etc/proftpd.conf'], File['/etc/proftpd/modules.conf'] ]
+  case $ensure {
+    'running', 'stopped': {
+      service { 'proftpd':
+        ensure     => $ensure,
+        hasstatus  => true,
+        hasrestart => true,
+        subscribe  => [ File['/etc/proftpd.conf'], File['/etc/proftpd/modules.conf'] ]
+      }
+    }
+    'unmanaged': {
+      notice('Class[proftpd]: service is currently not being managed')
+    }
+    default: {
+      fail('Class[proftpd]: parameter ensure must be running, stopped or unmanaged')
+    }
   }
 
   user { 'proftpd':
