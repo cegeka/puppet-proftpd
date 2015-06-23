@@ -56,7 +56,7 @@ define proftpd::instance::sftp(
       owner   => 'proftpd',
       group   => 'proftpd',
       require => File["${logdir}/proftpd"],
-      notify  => Service['proftpd']
+      notify  => Class['proftpd::service']
     }
   }
 
@@ -66,7 +66,7 @@ define proftpd::instance::sftp(
     group   => root,
     mode    => '0644',
     content => template("${module_name}/sites.d/sftp.conf.erb"),
-    notify  => Service['proftpd']
+    notify  => Class['proftpd::service']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.conf":
@@ -75,7 +75,7 @@ define proftpd::instance::sftp(
     group   => root,
     mode    => '0644',
     content => template("${module_name}/users.d/users.conf.erb"),
-    notify  => Service['proftpd']
+    notify  => Class['proftpd::service']
   }
 
   if $authentication == 'file' {
