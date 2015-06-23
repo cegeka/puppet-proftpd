@@ -14,83 +14,26 @@ class proftpd (
   $manage_proftpd_conf = false,
   $proftpd_user  = 'proftpd',
   $proftpd_group = 'proftpd',
-  $ensure = 'running'
+  $service_state = 'running',
+  $service_enable = true,
 ) {
 
   include stdlib
 
-  validate_re($ensure, '^running$|^stopped$|^unmanaged$')
+  anchor { 'proftpd::begin': }
+  anchor { 'proftpd::end': }
 
-  package { ['proftpd','proftpd-mysql','proftpd-postgresql','proftpd-ldap']:
-    ensure => present
+  class { 'proftpd::package': }
+
+  class { 'proftpd::config':
+    manage_proftpd_conf => $manage_proftpd_conf
   }
 
-  file { '/etc/proftpd':
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    require => Package['proftpd']
+  class { 'proftpd::service':
+    ensure => $service_state,
+    enable => $service_enable
   }
 
-  file { [ '/etc/proftpd/sites.d', '/etc/proftpd/users.d' ]:
-    ensure  => directory,
-    owner   => root,
-    group   => root,
-    mode    => '0755',
-    require => File['/etc/proftpd']
-  }
-
-  file { '/etc/proftpd.conf':
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template("${module_name}/proftpd.conf.erb"),
-    replace => $manage_proftpd_conf,
-    require => Package['proftpd']
-  }
-
-  file { '/etc/proftpd/modules.conf':
-    ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
-    content => template("${module_name}/modules.conf.erb"),
-    require => File['/etc/proftpd']
-  }
-
-  case $ensure {
-    'running', 'stopped': {
-      service { 'proftpd':
-        ensure     => $ensure,
-        hasstatus  => true,
-        hasrestart => true,
-        subscribe  => [ File['/etc/proftpd.conf'], File['/etc/proftpd/modules.conf'] ]
-      }
-    }
-    'unmanaged': {
-      notice('Class[proftpd]: service is currently not being managed')
-    }
-    default: {
-      fail('Class[proftpd]: parameter ensure must be running, stopped or unmanaged')
-    }
-  }
-
-  user { 'proftpd':
-    ensure     => present,
-    uid        => '5001',
-    gid        => 'proftpd',
-    shell      => '/bin/sh',
-    comment    => 'ProFTPd user',
-    home       => '/var/run/proftpd',
-    managehome => false,
-    require    => Group['proftpd']
-  }
-
-  group { 'proftpd':
-    ensure => present,
-    gid    => '5001'
-  }
+  Anchor['proftpd::begin'] -> Class['Proftpd::Package'] -> Class['Proftpd::Config'] ~> Class['Proftpd::Service'] -> Anchor['proftpd::end']
 
 }
