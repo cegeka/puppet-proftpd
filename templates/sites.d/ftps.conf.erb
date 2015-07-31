@@ -39,5 +39,6 @@ TimesGMT off
 
 TransferLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_xferlog
 ExtendedLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_commands.log all
+WtmpLog                         off
 
 </VirtualHost>
