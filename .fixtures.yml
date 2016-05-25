@@ -1,5 +1,0 @@
-fixtures:
-  repositories:
-    "stdlib": "ssh://git@github.com/cegeka/puppet-stdlib.git"
-  symlinks:
-    "proftpd": "#{source_dir}"
