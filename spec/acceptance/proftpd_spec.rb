@@ -21,7 +21,7 @@ describe 'proftpd' do
         }
         proftpd::instance::sftp { 'proftpd sftp vhost':
           ipaddress => '0.0.0.0',
-          port      => '22',
+          port      => '2222',
           logdir    => '/var/log/',
         }
         proftpd::instance::ftps { 'proftpd ftps vhost':
@@ -39,7 +39,7 @@ describe 'proftpd' do
     describe port(21) do
       it { is_expected.to be_listening }
     end
-    describe port(22) do
+    describe port(2222) do
       it { is_expected.to be_listening }
     end
 
