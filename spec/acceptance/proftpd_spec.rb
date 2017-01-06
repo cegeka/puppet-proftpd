@@ -19,6 +19,16 @@ describe 'proftpd' do
           port      => '21',
           logdir    => '/var/log/',
         }
+        proftpd::instance::sftp { 'proftpd sftp vhost':
+          ipaddress => '0.0.0.0',
+          port      => '22',
+          logdir    => '/var/log/',
+        }
+        proftpd::instance::ftps { 'proftpd ftps vhost':
+          ipaddress => '0.0.0.0',
+          port      => '990',
+          logdir    => '/var/log/',
+        }
       EOS
 
       # Run it twice and test for idempotency
