@@ -39,6 +39,12 @@ describe 'proftpd' do
     describe port(21) do
       it { is_expected.to be_listening }
     end
+    describe port(22) do
+      it { is_expected.to be_listening }
+    end
+    describe port(990) do
+      it { is_expected.to be_listening }
+    end
 
     describe service('proftpd') do
       it { is_expected.to be_enabled }
