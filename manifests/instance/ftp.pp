@@ -14,7 +14,8 @@ define proftpd::instance::ftp(
   $mysql_host=undef,
   $mysql_user=undef,
   $mysql_pass=undef,
-  $mysql_db=undef
+  $mysql_db=undef,
+  $manage_proftpd_conf=undef
 ) {
 
   include proftpd
