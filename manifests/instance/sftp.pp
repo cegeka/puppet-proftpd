@@ -21,7 +21,9 @@ define proftpd::instance::sftp(
   $manage_proftpd_conf=undef
 ) {
 
-  include proftpd
+  class { 'proftpd':
+    manage_proftpd_conf => $manage_proftpd_conf
+  }
 
   $protocol = 'sftp'
 
