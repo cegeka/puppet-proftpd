@@ -22,7 +22,7 @@ SQLGroupInfo                    ftp_group groupname gid members
 SQLMinUserUID                   101
 SQLMinUserGID                   101
 <%- if @enable_auto_expiry -%>
-SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= @protocol %> = 'true' AND ((expire='Y' AND delchange + INTERVAL <%= @expire_days %> DAY <= NOW() OR expire='N'))"
+SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= @protocol %> = 'true' AND ((expire='Y' AND delchange + INTERVAL <%= @expire_days %> DAY >= NOW() OR expire='N'))"
 <%- else -%>
 SQLUserWhereClause  "active = 'Y' AND deleted = 'N' AND <%= @protocol %> = 'true'"
 <%- end -%>
