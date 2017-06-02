@@ -15,7 +15,9 @@ define proftpd::instance::ftp(
   $mysql_user=undef,
   $mysql_pass=undef,
   $mysql_db=undef,
-  $manage_proftpd_conf=undef
+  $manage_proftpd_conf=undef,
+  $enable_auto_expiry=false,
+  $expire_days='30'
 ) {
 
   if ($manage_proftpd_conf != undef) {
