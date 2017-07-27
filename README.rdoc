@@ -1,5 +1,5 @@
 = puppet-proftpd module
 
-{<img src='https://codex.cegeka.be/jenkins/job/puppet-proftpd/badge/icon' />}[https://codex.cegeka.be/jenkins/job/puppet-proftpd/]
+{<img src='https://jenkins-iac.cegeka.be/job/puppet-proftpd/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-proftpd/]
 
 This is the proftpd module.
