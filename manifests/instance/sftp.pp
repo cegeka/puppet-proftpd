@@ -1,3 +1,4 @@
+# Type: proftpd::instance::sftp - creates an SFTP server instance
 define proftpd::instance::sftp(
   $ensure=present,
   $ipaddress='0.0.0.0',
@@ -5,7 +6,7 @@ define proftpd::instance::sftp(
   $server_name='sFTP server',
   $server_ident='sFTP server ready',
   $server_admin='root@server',
-  $logdir=undef,
+  $logdir='/var/log',
   $max_clients='45',
   $max_loginattempts='3',
   $default_root='~',
@@ -53,17 +54,20 @@ define proftpd::instance::sftp(
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
-      ensure  => directory,
-      owner   => 'proftpd',
-      group   => 'proftpd',
+      ensure => directory,
+      owner  => $proftpd::proftpd_user,
+      group  => $proftpd::proftpd_group,
+      mode   => '0750',
     }
+
   }
 
   if ! defined(File["${logdir}/proftpd/sftp"]) {
     file { "${logdir}/proftpd/sftp":
       ensure  => directory,
-      owner   => 'proftpd',
-      group   => 'proftpd',
+      owner   => $proftpd::proftpd_user,
+      group   => $proftpd::proftpd_group,
+      mode    => '0750',
       require => File["${logdir}/proftpd"],
       notify  => Class['proftpd::service']
     }
@@ -71,18 +75,18 @@ define proftpd::instance::sftp(
 
   file { "/etc/proftpd/sites.d/${vhost_name}.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
+    owner   => 'root',
+    group   => $proftpd::proftpd_group,
+    mode    => '0640',
     content => template("${module_name}/sites.d/sftp.conf.erb"),
     notify  => Class['proftpd::service']
   }
 
   file { "/etc/proftpd/users.d/${vhost_name}.conf":
     ensure  => file,
-    owner   => root,
-    group   => root,
-    mode    => '0644',
+    owner   => 'root',
+    group   => $proftpd::proftpd_group,
+    mode    => '0640',
     content => template("${module_name}/users.d/users.conf.erb"),
     notify  => Class['proftpd::service']
   }
@@ -90,17 +94,17 @@ define proftpd::instance::sftp(
   if $authentication == 'file' {
     file { "/etc/proftpd/users.d/${vhost_name}.passwd":
       ensure  => file,
-      owner   => root,
-      group   => root,
-      mode    => '0644',
+      owner   => 'root',
+      group   => $proftpd::proftpd_group,
+      mode    => '0640',
       replace => false
     }
 
     file { "/etc/proftpd/users.d/${vhost_name}.group":
       ensure  => file,
-      owner   => root,
-      group   => root,
-      mode    => '0644',
+      owner   => 'root',
+      group   => $proftpd::proftpd_group,
+      mode    => '0640',
       replace => false
     }
   }
