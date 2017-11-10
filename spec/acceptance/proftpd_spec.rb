@@ -14,6 +14,10 @@ describe 'proftpd' do
         
         Yum::Repo <| title == 'epel' |>
 
+        class { 'proftpd':
+          manage_proftpd_conf => true,
+        }
+
         proftpd::instance::ftp { 'proftpd ftp vhost':
           ipaddress => '0.0.0.0',
           port      => '21',
