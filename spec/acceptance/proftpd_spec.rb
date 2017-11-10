@@ -14,9 +14,23 @@ describe 'proftpd' do
         
         Yum::Repo <| title == 'epel' |>
 
+        class { 'proftpd':
+          manage_proftpd_conf => true,
+        }
+
         proftpd::instance::ftp { 'proftpd ftp vhost':
           ipaddress => '0.0.0.0',
           port      => '21',
+          logdir    => '/var/log/',
+        }
+        proftpd::instance::sftp { 'proftpd sftp vhost':
+          ipaddress => '0.0.0.0',
+          port      => '2222',
+          logdir    => '/var/log/',
+        }
+        proftpd::instance::ftps { 'proftpd ftps vhost':
+          ipaddress => '0.0.0.0',
+          port      => '990',
           logdir    => '/var/log/',
         }
       EOS
@@ -29,6 +43,9 @@ describe 'proftpd' do
     describe port(21) do
       it { is_expected.to be_listening }
     end
+    describe port(2222) do
+      it { is_expected.to be_listening }
+    end
 
     describe service('proftpd') do
       it { is_expected.to be_enabled }
@@ -36,3 +53,4 @@ describe 'proftpd' do
     end
   end
 end
+
