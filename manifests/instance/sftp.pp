@@ -86,7 +86,7 @@ define proftpd::instance::sftp(
     ensure  => file,
     owner   => 'root',
     group   => $proftpd::proftpd_group,
-    mode    => '0640',
+    mode    => '0644',
     content => template("${module_name}/users.d/users.conf.erb"),
     notify  => Class['proftpd::service']
   }
@@ -96,7 +96,7 @@ define proftpd::instance::sftp(
       ensure  => file,
       owner   => 'root',
       group   => $proftpd::proftpd_group,
-      mode    => '0640',
+      mode    => '0644',
       replace => false
     }
 
@@ -104,7 +104,7 @@ define proftpd::instance::sftp(
       ensure  => file,
       owner   => 'root',
       group   => $proftpd::proftpd_group,
-      mode    => '0640',
+      mode    => '0644',
       replace => false
     }
   }
