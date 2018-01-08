@@ -3,3 +3,4 @@
 {<img src='https://jenkins-iac.cegeka.be/job/puppet-proftpd/badge/icon' />}[https://jenkins-iac.cegeka.be/job/puppet-proftpd/]
 
 This is the proftpd module.
+
