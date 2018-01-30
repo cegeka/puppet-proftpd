@@ -21,7 +21,9 @@ define proftpd::instance::sftp(
   $mysql_db=undef,
   $manage_proftpd_conf=undef,
   $enable_auto_expiry=false,
-  $expire_days='30'
+  $expire_days='30',
+  $hidden_store=false,
+  $hidden_store_dirs=[]
 ) {
 
   if ($manage_proftpd_conf != undef) {

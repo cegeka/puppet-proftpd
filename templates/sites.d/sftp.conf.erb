@@ -38,6 +38,17 @@ MaxLoginAttempts    <%= @max_loginattempts %>
 DefaultRoot         <%= @default_root %>
 AllowOverwrite      <%= @allowoverwrite %>
 
+<%- if @hidden_store == true -%>
+<%- if ! @hidden_store_dirs.empty? -%>
+<%- @hidden_store_dirs.each do |dir| -%>
+<Directory <%= dir %> >
+  HiddenStores        tmp
+  AllowStoreRestart   off
+</Directory>
+<%- end -%>
+<%- end -%>
+<%- end -%>
+
 TimesGMT            off
 
 TransferLog         <%= @logdir %>/proftpd/sftp/<%= @vhost_name %>_xferlog
