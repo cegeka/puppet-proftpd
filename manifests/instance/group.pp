@@ -1,3 +1,4 @@
+# == Define: proftpd::instance::group
 define proftpd::instance::group(
   $ipaddress=undef,
   $port=undef,
