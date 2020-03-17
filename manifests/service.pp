@@ -1,3 +1,4 @@
+# == Class: proftpd::service
 class proftpd::service (
   $ensure = 'running',
   $enable = true

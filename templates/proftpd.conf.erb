@@ -36,11 +36,13 @@ SystemLog                       /var/log/proftpd/proftpd.log
 User                            <%= scope['proftpd::proftpd_user'] %>
 Group                           <%= scope['proftpd::proftpd_group'] %>
 
+PidFile                         /run/proftpd/proftpd.pid
+
 # To prevent DoS attacks, set the maximum number of child processes
 # to 20.  If you need to allow more than 20 concurrent connections
 # at once, simply increase this value.
 
-MaxInstances                    20
+MaxInstances                    <%= scope['proftpd::max_instances'] %>
 
 UseSendfile                     off
 
@@ -78,5 +80,25 @@ LogFormat                       auth    "%v [%P] %h %t \"%r\" %s"
 </IfModule>
 
 </Global>
+
+# Allow only user root to load and unload modules, but allow everyone
+# to see which modules have been loaded
+# (http://www.proftpd.org/docs/modules/mod_dso.html#ModuleControlsACLs)
+ModuleControlsACLs              insmod,rmmod allow user root
+ModuleControlsACLs              lsmod allow user *
+
+# Enable basic controls via ftpdctl
+# (http://www.proftpd.org/docs/modules/mod_ctrls.html)
+ControlsEngine                  on
+ControlsACLs                    all allow user root
+ControlsSocketACL               allow user *
+ControlsLog                     /var/log/proftpd/controls.log
+
+# Enable admin controls via ftpdctl
+# (http://www.proftpd.org/docs/contrib/mod_ctrls_admin.html)
+<IfModule mod_ctrls_admin.c>
+  AdminControlsEngine           on
+  AdminControlsACLs             all allow user root
+</IfModule>
 
 Include /etc/proftpd/sites.d/*

@@ -1,4 +1,62 @@
-# Type: proftpd::instance::sftp - creates an SFTP server instance
+# == Define: proftpd::instance::sftp
+#
+# Used to configure an sftp instance
+#
+# === Parameters
+#
+# [*ipaddress*]
+#
+# [*port*]
+#
+# [*server_name*]
+#
+# [*server_ident*]
+#
+# ...
+#
+# === Examples
+#
+# class { 'proftpd':
+#   manage_proftpd_conf => true,
+#   proftpd_user        => proftpd,
+#   proftpd_group       => proftpd,
+#   service_state       => running,
+#   service_enable      => enabled,
+#   max_instances       => 10
+# }
+#
+# Hiera based instance configuration:
+#
+# proftpd::instance::ftp:
+#   'localhost':
+#     ipaddress: '192.168.33.10'
+#     port: '21'
+#     server_name: 'FTP server'
+#     server_ident: 'FTP server ready'
+#     server_admin: 'root@server'
+#     max_clients: '45'
+#     max_loginattempts: '3'
+#     default_root: '~'
+#     allowoverwrite: 'on'
+#     passive_ports: '60000 65535'
+#     authentication: 'file'
+#     enable_auto_expiry: false
+#     expire_days: '30'
+#     sftp_hostkey:
+#       - /etc/ssh/ssh_host_ecdsa_key
+#       - /etc/ssh/ssh_host_rsa_ke
+#
+# === Authors
+#
+# Computing <computing@cegeka.com>
+# Fabian Dammekens <fabian.dammekens@cegeka.com>
+##
+# === Copyright
+#
+# MIT License
+#
+# Copyright (c) 2020 Cegeka
+#
 define proftpd::instance::sftp(
   $ensure=present,
   $ipaddress='0.0.0.0',
@@ -12,6 +70,8 @@ define proftpd::instance::sftp(
   $default_root='~',
   $allowoverwrite='on',
   $sftprekey=undef,
+  $sftp_hostkey=undef,
+  $sftp_hostkey_insecure=false,
   $timeoutidle=undef,
   $sftp_client_match=[],
   $authentication='file',
@@ -25,14 +85,6 @@ define proftpd::instance::sftp(
   $hidden_store=false,
   $hidden_store_dirs=[]
 ) {
-
-  if ($manage_proftpd_conf != undef) {
-    class { 'proftpd':
-      manage_proftpd_conf => $manage_proftpd_conf
-    }
-  } else {
-    include 'proftpd'
-  }
 
   $protocol = 'sftp'
 
@@ -88,7 +140,7 @@ define proftpd::instance::sftp(
     ensure  => file,
     owner   => 'root',
     group   => $proftpd::proftpd_group,
-    mode    => '0644',
+    mode    => '0640',
     content => template("${module_name}/users.d/users.conf.erb"),
     notify  => Class['proftpd::service']
   }
@@ -98,16 +150,24 @@ define proftpd::instance::sftp(
       ensure  => file,
       owner   => 'root',
       group   => $proftpd::proftpd_group,
-      mode    => '0644',
-      replace => false
+      mode    => '0640',
+      replace => false,
+      notify  => Class['proftpd::service']
     }
 
     file { "/etc/proftpd/users.d/${vhost_name}.group":
       ensure  => file,
       owner   => 'root',
       group   => $proftpd::proftpd_group,
-      mode    => '0644',
-      replace => false
+      mode    => '0640',
+      replace => false,
+      notify  => Class['proftpd::service']
+    }
+
+    file { $sftp_hostkey :
+      ensure => file,
+      mode   => '0600',
+      notify => Class['proftpd::service']
     }
   }
 

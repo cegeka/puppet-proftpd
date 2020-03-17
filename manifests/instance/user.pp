@@ -1,3 +1,29 @@
+# == Define: proftpd::instance::user
+#
+# Used to configure a user for an ftp instance
+#
+# === Parameters
+#
+# [*ipaddress*]
+#
+# [*port*]
+#
+# [*username*]
+#
+# [*password*]
+#
+# ...
+#
+# === Examples
+#
+# === Authors
+#
+# === Copyright
+#
+# MIT License
+#
+# Copyright (c) 2020 Cegeka
+#
 define proftpd::instance::user(
   $ipaddress=undef,
   $port=undef,

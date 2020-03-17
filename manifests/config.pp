@@ -1,3 +1,4 @@
+# Class proftpd config
 class proftpd::config (
   $manage_proftpd_conf = false
 ) {

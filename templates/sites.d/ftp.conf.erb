@@ -2,15 +2,30 @@
 
 Include /etc/proftpd/users.d/<%= @vhost_name %>.conf
 
-ServerName          "<%= @server_name %>"
-ServerIdent         on "<%= @server_ident %>"
-ServerAdmin         <%= @server_admin %>
+ServerName                      "<%= @server_name %>"
+ServerIdent                     on "<%= @server_ident %>"
+ServerAdmin                     <%= @server_admin %>
+Port                            <%= @port %>
+PassivePorts                    <%= @passive_ports %>
 
-DisplayLogin 				welcome.msg
+<% if @tls_enabled -%>
+<IfModule mod_tls.c>
+TLSEngine                       on
+TLSRequired                     <%= @tls_required %>
+TLSCipherSuite                  <%= @tls_cipher %>
+TLSOptions                      <%= @tls_options %>
+TLSProtocol                     <%= @tls_protocol %>
+TLSCACertificateFile            <%= @tls_ca_cert %>
+TLSRSACertificateFile           <%= @tls_rsa_cert %>
+TLSRSACertificateKeyFile        <%= @tls_rsa_key %>
+TLSCertificateChainFile         <%= @tls_rsa_chain %>
+TLSVerifyClient                 off
+TLSRenegotiate                  <%= @tls_renegotiate %>
+</IfModule>
+<% end -%>
 
-PathDenyFilter      \.ftp[a-z]+$
-
-Port                <%= @port %>
+DisplayLogin                    welcome.msg
+PathDenyFilter                  \.ftp[a-z]+$
 
 Umask                           0006 0007
 
@@ -20,12 +35,11 @@ MaxLoginAttempts                <%= @max_loginattempts %>
 DefaultRoot                     <%= @default_root %>
 AllowOverwrite                  <%= @allowoverwrite %>
 
-PassivePorts                    <%= @passive_ports %>
+TimesGMT                        off
 
-TimesGMT off
-
-TransferLog <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_xferlog
-ExtendedLog <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_commands.log all
+TLSLog                          <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_tlslog
+TransferLog                     <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_xferlog
+ExtendedLog                     <%= @logdir %>/proftpd/ftp/<%= @vhost_name %>_commands.log all
 WtmpLog                         off
 
 </VirtualHost>

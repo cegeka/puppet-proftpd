@@ -2,43 +2,42 @@
 
 Include /etc/proftpd/users.d/<%= @vhost_name %>.conf
 
-ServerAdmin                     root@localhost
-ServerName                      "ftps-intern.cegeka.be"
-ServerIdent                     on "interne Secure FTP server "
+ServerName                      "<%= @server_name %>"
+ServerIdent                     on "<%= @server_ident %>"
+ServerAdmin                     <%= @server_admin %>
+Port                            <%= @port %>
+PassivePorts                    <%= @passive_ports %>
 
 <IfModule mod_tls.c>
 TLSEngine                       on
-TLSRequired                     on
-TLSLog                          /var/log/proftpd/secureftp-intern.log
-TLSCipherSuite                  ALL:!ADH
-TLSOptions                      NoCertRequest
-TLSCACertificateFile            /etc/proftpd/ssl/root-ca.crt
-TLSRSACertificateFile           <%= @tls_rsa_cert_file %>
-TLSRSACertificateKeyFile        <%= @tls_rsa_cert_key_file %>
-TLSCertificateChainFile         /etc/proftpd/ssl/globalsign-intermediate.crt
+TLSRequired                     <%= @tls_required %>
+TLSCipherSuite                  <%= @tls_cipher %>
+TLSOptions                      <%= @tls_options %>
+TLSProtocol                     <%= @tls_protocol %>
+TLSCACertificateFile            <%= @tls_ca_cert %>
+TLSRSACertificateFile           <%= @tls_rsa_cert %>
+TLSRSACertificateKeyFile        <%= @tls_rsa_key %>
+TLSCertificateChainFile         <%= @tls_rsa_chain %>
 TLSVerifyClient                 off
+TLSRenegotiate                  <%= @tls_renegotiate %>
 </IfModule>
 
 DisplayLogin                    welcome.msg
-
 PathDenyFilter                  \.ftp[a-z]+$
-
-Port                            <%= @port %>
 
 Umask                           0006 0007
 
 DeleteAbortedStores             on
-MaxClientsPerHost               10
-MaxLoginAttempts                3
-DefaultRoot                     ~
-AllowOverwrite                  on
+MaxClientsPerHost               <%= @max_clients %>
+MaxLoginAttempts                <%= @max_loginattempts %>
+DefaultRoot                     <%= @default_root %>
+AllowOverwrite                  <%= @allowoverwrite %>
 
-PassivePorts                    60000 65535
+TimesGMT                        off
 
-TimesGMT off
-
-TransferLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_xferlog
-ExtendedLog <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_commands.log all
+TLSLog                          <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_tlslog
+TransferLog                     <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_xferlog
+ExtendedLog                     <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_commands.log all
 WtmpLog                         off
 
 </VirtualHost>

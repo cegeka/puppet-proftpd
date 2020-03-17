@@ -16,6 +16,7 @@ class proftpd (
   $proftpd_group = 'proftpd',
   $service_state = 'running',
   $service_enable = true,
+  $max_instances = 20
 ) {
 
   include stdlib
