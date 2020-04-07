@@ -70,7 +70,7 @@ define proftpd::instance::sftp(
   $default_root='~',
   $allowoverwrite='on',
   $sftprekey=undef,
-  $sftp_hostkey=undef,
+  $sftp_hostkey=['/etc/ssh/ssh_host_rsa_key'],
   $sftp_hostkey_insecure=false,
   $timeoutidle=undef,
   $sftp_client_match=[],
