@@ -62,7 +62,7 @@ define proftpd::instance::ftps(
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
   }
 
-  if ($tls_enabled != undef) and (($tls_rsa_key == undef) or ($tls_rsa_cert == undef) or ($tls_rsa_chain == undef)) {
+  if ($tls_enabled != false) and (($tls_rsa_key == undef) or ($tls_rsa_cert == undef) or ($tls_rsa_chain == undef)) {
     fail("Proftpd::Instance::Ftp[${title}]: tls enabled, but key, certificate or chain are missing")
   }
 
