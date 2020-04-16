@@ -54,8 +54,8 @@ AllowOverwrite                  <%= @allowoverwrite %>
 
 TimesGMT                        off
 
-TransferLog                     <%= @logdir %>/proftpd/sftp/<%= @vhost_name %>_xferlog
-ExtendedLog                     <%= @logdir %>/proftpd/sftp/<%= @vhost_name %>_commands.log all
+TransferLog                     <%= @transfer_log %>
+ExtendedLog                     <%= @extended_log %> all<% @custom_logformat.each do |logformat| -%> <%=logformat -%><% end %>
 WtmpLog                         off
 
 </VirtualHost>

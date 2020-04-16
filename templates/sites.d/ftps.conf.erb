@@ -35,9 +35,9 @@ AllowOverwrite                  <%= @allowoverwrite %>
 
 TimesGMT                        off
 
-TLSLog                          <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_tlslog
-TransferLog                     <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_xferlog
-ExtendedLog                     <%= @logdir %>/proftpd/ftps/<%= @vhost_name %>_commands.log all
+TLSLog                          <%= @tls_log %>
+TransferLog                     <%= @transfer_log %>
+ExtendedLog                     <%= @extended_log %> all<% @custom_logformat.each do |logformat| -%> <%=logformat -%><% end %>
 WtmpLog                         off
 
 </VirtualHost>
