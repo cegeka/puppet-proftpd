@@ -12,8 +12,10 @@
 #
 class proftpd (
   $manage_proftpd_conf = false,
-  $proftpd_user  = 'proftpd',
+  $proftpd_user = 'proftpd',
+  $proftpd_user_id = '5001',
   $proftpd_group = 'proftpd',
+  $proftpd_group_id = '5001',
   $service_state = 'running',
   $service_enable = true,
   $max_instances = 20

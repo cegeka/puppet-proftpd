@@ -38,8 +38,8 @@ class proftpd::config (
 
   user { 'proftpd':
     ensure     => present,
-    uid        => '5001',
-    gid        => 'proftpd',
+    uid        => $proftpd::proftpd_user_id,
+    gid        => $proftpd::proftpd_group,
     shell      => '/bin/sh',
     comment    => 'ProFTPd user',
     home       => '/var/run/proftpd',
@@ -49,7 +49,7 @@ class proftpd::config (
 
   group { 'proftpd':
     ensure => present,
-    gid    => '5001'
+    gid    => $proftpd::proftpd_group_id
   }
 
 }
