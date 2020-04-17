@@ -29,7 +29,8 @@
 #
 # proftpd::instance::ftp:
 #   'localhost':
-#     ipaddress: '192.168.33.10'
+#     ipaddress:
+#       - '192.168.33.10'
 #     port: '21'
 #     server_name: 'FTP server'
 #     server_ident: 'FTP server ready'
@@ -65,8 +66,10 @@
 # Copyright (c) 2020 Cegeka
 #
 define proftpd::instance::ftp(
-  $ipaddress='0.0.0.0',
+  $ipaddress=['0.0.0.0'],
+  $first_ip=Array($ipaddress,true)[0],
   $port='21',
+  $protocol='ftp',
   $server_name='FTP server',
   $server_ident='FTP server ready',
   $server_admin='root@server',
@@ -76,9 +79,9 @@ define proftpd::instance::ftp(
   $default_root='~',
   $allowoverwrite='on',
   $passive_ports='60000 65535',
-  $tls_log="${logdir}/proftpd/ftp/${ipaddress}_${port}_tlslog",
-  $transfer_log="${logdir}/proftpd/ftp/${ipaddress}_${port}_xferlog",
-  $extended_log="${logdir}/proftpd/ftp/${ipaddress}_${port}_commands.log",
+  $tls_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_tlslog",
+  $transfer_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_xferlog",
+  $extended_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_commands.log",
   $custom_logformat=[],
   $authentication='file',
   $mysql_host=undef,
@@ -100,8 +103,6 @@ define proftpd::instance::ftp(
   $tls_renegotiate='required off'
 ) {
 
-  $protocol = 'ftp'
-
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
   }
@@ -110,7 +111,7 @@ define proftpd::instance::ftp(
     fail("Proftpd::Instance::Ftp[${title}]: tls enabled, but key, certificate or chain are missing")
   }
 
-  $vhost_name = "${ipaddress}_${port}"
+  $vhost_name = "${first_ip}_${port}"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
@@ -120,8 +121,8 @@ define proftpd::instance::ftp(
     }
   }
 
-  if ! defined(File["${logdir}/proftpd/ftp"]) {
-    file { "${logdir}/proftpd/ftp":
+  if ! defined(File["${logdir}/proftpd/${protocol}"]) {
+    file { "${logdir}/proftpd/${protocol}":
       ensure  => directory,
       owner   => 'proftpd',
       group   => 'proftpd',
@@ -135,7 +136,7 @@ define proftpd::instance::ftp(
     owner   => root,
     group   => root,
     mode    => '0640',
-    content => template("${module_name}/sites.d/ftp.conf.erb"),
+    content => template("${module_name}/sites.d/${protocol}.conf.erb"),
     notify  => Class['proftpd::service']
   }
 

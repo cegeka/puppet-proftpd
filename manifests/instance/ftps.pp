@@ -25,8 +25,10 @@
 # Copyright (c) 2020 Cegeka
 #
 define proftpd::instance::ftps(
-  $ipaddress='0.0.0.0',
+  $ipaddress=['0.0.0.0'],
+  $first_ip=Array($ipaddress,true)[0],
   $port='990',
+  $protocol='ftps',
   $server_name='FTP server',
   $server_ident='FTP server ready',
   $server_admin='root@server',
@@ -36,9 +38,9 @@ define proftpd::instance::ftps(
   $default_root='~',
   $allowoverwrite='on',
   $passive_ports='60000 65535',
-  $tls_log="${logdir}/proftpd/ftps/${ipaddress}_${port}_tlslog",
-  $transfer_log="${logdir}/proftpd/ftps/${ipaddress}_${port}_xferlog",
-  $extended_log="${logdir}/proftpd/ftps/${ipaddress}_${port}_commands.log",
+  $tls_log="${logdir}/proftpd/ftps/${first_ip}_${port}_tlslog",
+  $transfer_log="${logdir}/proftpd/ftps/${first_ip}_${port}_xferlog",
+  $extended_log="${logdir}/proftpd/ftps/${first_ip}_${port}_commands.log",
   $custom_logformat=[],
   $authentication='file',
   $mysql_host=undef,
@@ -60,8 +62,6 @@ define proftpd::instance::ftps(
   $tls_renegotiate='required off'
 ) {
 
-  $protocol = 'ftps'
-
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
   }
@@ -70,7 +70,7 @@ define proftpd::instance::ftps(
     fail("Proftpd::Instance::Ftp[${title}]: tls enabled, but key, certificate or chain are missing")
   }
 
-  $vhost_name = "${ipaddress}_${port}"
+  $vhost_name = "${first_ip}_${port}"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
@@ -80,8 +80,8 @@ define proftpd::instance::ftps(
     }
   }
 
-  if ! defined(File["${logdir}/proftpd/ftp"]) {
-    file { "${logdir}/proftpd/ftp":
+  if ! defined(File["${logdir}/proftpd/${protocol}"]) {
+    file { "${logdir}/proftpd/${protocol}":
       ensure  => directory,
       owner   => 'proftpd',
       group   => 'proftpd',
@@ -95,7 +95,7 @@ define proftpd::instance::ftps(
     owner   => root,
     group   => root,
     mode    => '0640',
-    content => template("${module_name}/sites.d/ftp.conf.erb"),
+    content => template("${module_name}/sites.d/${protocol}.conf.erb"),
     notify  => Class['proftpd::service']
   }
 

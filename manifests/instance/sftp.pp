@@ -59,8 +59,10 @@
 #
 define proftpd::instance::sftp(
   $ensure=present,
-  $ipaddress='0.0.0.0',
+  $ipaddress=['0.0.0.0'],
+  $first_ip=Array($ipaddress,true)[0],
   $port='22',
+  $protocol='sftp',
   $server_name='sFTP server',
   $server_ident='sFTP server ready',
   $server_admin='root@server',
@@ -74,8 +76,8 @@ define proftpd::instance::sftp(
   $sftp_hostkey_insecure=false,
   $timeoutidle=undef,
   $sftp_client_match=[],
-  $transfer_log="${logdir}/proftpd/sftp/${ipaddress}_${port}_xferlog",
-  $extended_log="${logdir}/proftpd/sftp/${ipaddress}_${port}_commands.log",
+  $transfer_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_xferlog",
+  $extended_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_commands.log",
   $custom_logformat=[],
   $authentication='file',
   $mysql_host=undef,
@@ -88,8 +90,6 @@ define proftpd::instance::sftp(
   $hidden_store=false,
   $hidden_store_dirs=[]
 ) {
-
-  $protocol = 'sftp'
 
   if ($logdir == undef) {
     fail("Proftpd::Instance::Ftp[${title}]: parameter logdir must be defined")
@@ -107,7 +107,7 @@ define proftpd::instance::sftp(
     }
   }
 
-  $vhost_name = "${ipaddress}_${port}"
+  $vhost_name = "${first_ip}_${port}"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
@@ -119,8 +119,8 @@ define proftpd::instance::sftp(
     }
   }
 
-  if ! defined(File["${logdir}/proftpd/sftp"]) {
-    file { "${logdir}/proftpd/sftp":
+  if ! defined(File["${logdir}/proftpd/${protocol}"]) {
+    file { "${logdir}/proftpd/${protocol}":
       ensure  => directory,
       owner   => $proftpd::proftpd_user,
       group   => $proftpd::proftpd_group,
@@ -135,7 +135,7 @@ define proftpd::instance::sftp(
     owner   => 'root',
     group   => $proftpd::proftpd_group,
     mode    => '0640',
-    content => template("${module_name}/sites.d/sftp.conf.erb"),
+    content => template("${module_name}/sites.d/${protocol}.conf.erb"),
     notify  => Class['proftpd::service']
   }
 
