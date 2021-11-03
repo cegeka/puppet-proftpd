@@ -59,7 +59,10 @@ define proftpd::instance::ftps(
   $tls_cipher='EECDH+AESGCM:EDH+AESGCM',
   $tls_protocol='TLSv1.2',
   $tls_options='NoCertRequest',
-  $tls_renegotiate='required off'
+  $tls_renegotiate='required off',
+  $readonly_enabled=false,
+  $readonly_users=[],
+  $readonly_groups=['readonly']
 ) {
 
   if ($logdir == undef) {

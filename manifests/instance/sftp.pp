@@ -88,7 +88,10 @@ define proftpd::instance::sftp(
   $enable_auto_expiry=false,
   $expire_days='30',
   $hidden_store=false,
-  $hidden_store_dirs=[]
+  $hidden_store_dirs=[],
+  $readonly_enabled=false,
+  $readonly_users=[],
+  $readonly_groups=['readonly']
 ) {
 
   if ($logdir == undef) {

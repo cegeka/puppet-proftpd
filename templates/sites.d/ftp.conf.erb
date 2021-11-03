@@ -42,4 +42,14 @@ TransferLog                     <%= @transfer_log %>
 ExtendedLog                     <%= @extended_log %> all<% @custom_logformat.each do |logformat| -%> <%=logformat -%><% end %>
 WtmpLog                         off
 
+<%- if @readonly_enabled -%>
+<Limit WRITE>
+<% @readonly_users.each do |user| -%>
+  DenyUser <%= user %>
+<% end -%>
+<% @readonly_groups.each do |group| -%>
+  DenyGroup <%= group %>
+<% end -%>
+</Limit>
+<%- end -%>
 </VirtualHost>
