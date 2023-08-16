@@ -46,13 +46,11 @@ CREATE TABLE IF NOT EXISTS `ftp_users` (
   `uid` int(11) NOT NULL default '101',
   `gid` int(11) NOT NULL default '65534',
   `home` varchar(255) NOT NULL default '/home/catchall',
-  `lastchange` varchar(50) NOT NULL default '',
+  `lastchange` datetime NOT NULL default CURRENT_TIMESTAMP,
   `deleted` varchar(1) NOT NULL default 'N',
-  `delchange` datetime NOT NULL default CURRENT_TIMESTAMP,
   `ftp` varchar(10) NOT NULL default 'false',
   `sftp` varchar(10) NOT NULL default 'true',
   `ftps` varchar(10) NOT NULL default 'false',
-  `migrated` tinyint(1) NOT NULL default 1,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `userid` (`userid`)
 );
