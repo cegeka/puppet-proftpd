@@ -38,9 +38,7 @@ define proftpd::instance::ftps(
   $default_root='~',
   $allowoverwrite='on',
   $passive_ports='60000 65535',
-  $tls_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_tlslog",
-  $transfer_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_xferlog",
-  $extended_log="${logdir}/proftpd/${protocol}/${first_ip}_${port}_commands.log",
+
   $custom_logformat=[],
   $authentication='file',
   $mysql_host=undef,
@@ -73,7 +71,22 @@ define proftpd::instance::ftps(
     fail("Proftpd::Instance::Ftp[${title}]: tls enabled, but key, certificate or chain are missing")
   }
 
-  $vhost_name = "${first_ip}_${port}"
+  $real_ipaddress = $ipaddress.map |$ip| {
+    if (! empty($ip)) {
+      "${ip}"
+    } else {
+      '127.0.0.1'
+    }
+  }
+  $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
+    warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
+    '127.0.0.1'
+  }
+
+  $vhost_name   = "${real_first_ip}_${port}"
+  $tls_log      = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_tlslog"
+  $transfer_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_xferlog"
+  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
