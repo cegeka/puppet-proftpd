@@ -38,7 +38,6 @@ define proftpd::instance::ftps(
   $default_root='~',
   $allowoverwrite='on',
   $passive_ports='60000 65535',
-
   $custom_logformat=[],
   $authentication='file',
   $mysql_host=undef,
