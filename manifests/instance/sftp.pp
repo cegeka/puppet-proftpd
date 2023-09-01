@@ -108,13 +108,22 @@ define proftpd::instance::sftp(
     }
   }
 
-  $real_ipaddress = $ipaddress.map |$ip| {
-    if (! empty($ip)) {
-      "${ip}"
+  if ($ipaddress =~ Array) {
+    $real_ipaddress = $ipaddress.map |$ip| {
+      if (! empty($ip)) {
+        "${ip}"
+      } else {
+        '127.0.0.1'
+      }
+    }
+  } else {
+    if (!empty($ipaddress)) {
+      $real_ipaddress = $ipaddress
     } else {
-      '127.0.0.1'
+      $real_ipaddress = '127.0.0.1'
     }
   }
+
   $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
     warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
     '127.0.0.1'

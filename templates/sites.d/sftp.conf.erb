@@ -1,4 +1,4 @@
-<VirtualHost<% if @real_ipaddress.class == Array -%><% @real_ipaddress.each do |ip| -%> <%= ip -%><% end %><% else -%> <%= @real_ipaddress -%><% end %>>
+<VirtualHost<% if @real_ipaddress.class == Array -%><% @real_ipaddress.uniq.each do |ip| -%> <%= ip -%><% end %><% else -%> <%= @real_ipaddress -%><% end %>>
 
 Include /etc/proftpd/users.d/<%= @vhost_name %>.conf
 

@@ -70,16 +70,20 @@ define proftpd::instance::ftps(
     fail("Proftpd::Instance::Ftp[${title}]: tls enabled, but key, certificate or chain are missing")
   }
 
-  $real_ipaddress = $ipaddress.map |$ip| {
-    if (! empty($ip)) {
-      "${ip}"
-    } else {
-      '127.0.0.1'
+  if ($ipaddress =~ Array) {
+    $real_ipaddress = $ipaddress.map |$ip| {
+      if (! empty($ip)) {
+        "${ip}"
+      } else {
+        '127.0.0.1'
+      }
     }
-  }
-  $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
-    warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
-    '127.0.0.1'
+  } else {
+    if (!empty($ipaddress)) {
+      $real_ipaddress = $ipaddress
+    } else {
+      $real_ipaddress = '127.0.0.1'
+    }
   }
 
   $vhost_name   = "${real_first_ip}_${port}"
