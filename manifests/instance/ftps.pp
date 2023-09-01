@@ -86,6 +86,11 @@ define proftpd::instance::ftps(
     }
   }
 
+  $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
+    warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
+    '127.0.0.1'
+  }
+
   $vhost_name   = "${real_first_ip}_${port}"
   $tls_log      = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_tlslog"
   $transfer_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_xferlog"
