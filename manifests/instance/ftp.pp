@@ -132,10 +132,10 @@ define proftpd::instance::ftp(
     '127.0.0.1'
   }
 
-  $vhost_name   = "${first_ip}_${port}"
-  $tls_log      = "${logdir}/proftpd/${protocol}/${first_ip}_${port}_tlslog"
-  $transfer_log = "${logdir}/proftpd/${protocol}/${first_ip}_${port}_xferlog"
-  $extended_log = "${logdir}/proftpd/${protocol}/${first_ip}_${port}_commands.log"
+  $vhost_name   = "${real_first_ip}_${port}"
+  $tls_log      = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_tlslog"
+  $transfer_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_xferlog"
+  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
