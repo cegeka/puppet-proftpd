@@ -68,6 +68,10 @@
 define proftpd::instance::ftp(
   $ipaddress=['0.0.0.0'],
   $first_ip=Array($ipaddress,true)[0],
+  $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
+    warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
+    '127.0.0.1'
+  },
   $port='21',
   $protocol='ftp',
   $server_name='FTP server',
@@ -100,7 +104,8 @@ define proftpd::instance::ftp(
   $tls_renegotiate='required off',
   $readonly_enabled=false,
   $readonly_users=[],
-  $readonly_groups=['readonly']
+  $readonly_groups=['readonly'],
+  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 ) {
 
   if ($logdir == undef) {
@@ -127,15 +132,9 @@ define proftpd::instance::ftp(
     }
   }
 
-  $real_first_ip = assert_type(String[1], $first_ip) |$expected, $actual| {
-    warning( "The IP should be of type \'${expected}\', not \'${actual}\': \'${first_ip}\'. Using '127.0.0.1'." )
-    '127.0.0.1'
-  }
-
   $vhost_name   = "${real_first_ip}_${port}"
   $tls_log      = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_tlslog"
   $transfer_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_xferlog"
-  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
