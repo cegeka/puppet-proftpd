@@ -89,7 +89,8 @@ define proftpd::instance::sftp(
   $hidden_store_dirs=[],
   $readonly_enabled=false,
   $readonly_users=[],
-  $readonly_groups=['readonly']
+  $readonly_groups=['readonly'],
+  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 ) {
 
   if ($logdir == undef) {
@@ -131,7 +132,6 @@ define proftpd::instance::sftp(
 
   $vhost_name = "${real_first_ip}_${port}"
   $transfer_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_xferlog"
-  $extended_log = "${logdir}/proftpd/${protocol}/${real_first_ip}_${port}_commands.log"
 
   if ! defined(File["${logdir}/proftpd"]) {
     file { "${logdir}/proftpd":
